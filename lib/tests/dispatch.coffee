@@ -2,14 +2,14 @@ should = require 'should'
 dispatch = require '../dispatch'
 middleware = {}
 func = (i) ->
-    (result, done) -> 
+    (result, done) ->
         result.data += i
         done() if done
 middleware['M'+i] = func(i) for i in [1..10]
 
 #test generated middleware
 
-result = 
+result =
     data: ''
 middleware.M1(result)
 middleware.M3(result)
@@ -126,7 +126,7 @@ main: (args) -> M2(args, () -> M1(args))
 
 ###
 
-result = 
+result =
     data: ''
 func = dispatch.getDispatchFunction(
     'mw1':
@@ -150,7 +150,7 @@ main: (args) -> M3(args, () -> M2(args, () -> M1(args)))
 
 ###
 
-result = 
+result =
     data: ''
 func = dispatch.getDispatchFunction(
     'mw1':
@@ -184,7 +184,7 @@ main: (args) ->
 
 ###
 
-result = 
+result =
     data: ''
 func = dispatch.getDispatchFunction(
     'mw1':
@@ -212,7 +212,7 @@ main: (args) ->
             M1(args)
             M2(args)
 ###
-result = 
+result =
     data: ''
 func = dispatch.getDispatchFunction(
     'mw1':
@@ -248,7 +248,7 @@ main: (args) ->
         M5(args, M4andM5ready)
 ###
 
-result = 
+result =
     data: ''
 func = dispatch.getDispatchFunction(
     'mw1':
@@ -288,7 +288,7 @@ main: (args) ->
 
 ###
 
-result = 
+result =
     data: ''
 func = dispatch.getDispatchFunction(
     'mw1':
@@ -328,7 +328,7 @@ main: (args) ->
         M5(args, M4andM5ready)
 ###
 
-result = 
+result =
     data: ''
 func = dispatch.getDispatchFunction(
     'mw1':
@@ -367,7 +367,7 @@ main: (args) ->
         M2(args, M3andM2ready)
 ###
 
-result = 
+result =
     data: ''
 func = dispatch.getDispatchFunction(
     'mw1':
@@ -408,7 +408,7 @@ main: (args) ->
 
 ###
 
-result = 
+result =
     data: ''
 func = dispatch.getDispatchFunction(
     'mw1':
@@ -437,7 +437,7 @@ Test two functions running at once to avoid interference
 
 ###
 
-result1 = 
+result1 =
     data: ''
 func1 = dispatch.getDispatchFunction(
     'mw1':
@@ -449,7 +449,7 @@ func1 = dispatch.getDispatchFunction(
         method: middleware.M2
 )
 
-result2 = 
+result2 =
     data: ''
 func2 = dispatch.getDispatchFunction(
     'mw1':

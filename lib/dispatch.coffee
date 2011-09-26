@@ -19,7 +19,7 @@ module.exports.getDispatchFunction = (config) ->
     __dispatchInit = {prepares: []}
     __dispatchFinish = {depends: []}
     dispatch = (func) ->
-        (args..., cb) -> 
+        (args..., cb) ->
             if func.prepares
                 for name in func.prepares
                     follower = config[name]
@@ -34,11 +34,11 @@ module.exports.getDispatchFunction = (config) ->
                 if func is __dispatchFinish
                     cb()
                 else if func.method
-                    func.method(args..., () -> func.dispatch(args..., cb)) 
+                    func.method(args..., () -> func.dispatch(args..., cb))
                 else
                     func.dispatch(args..., cb)
     for name, func of config
-        unless func.depends?.length 
+        unless func.depends?.length
             __dispatchInit.prepares.push(name)
             func.depends = arrayfy(func.depends)
             func.depends.push('__dispatchInit')
@@ -52,4 +52,4 @@ module.exports.getDispatchFunction = (config) ->
     config.__dispatchFinish = __dispatchFinish
     __dispatchFinish.isReady = isReady(__dispatchFinish)
 
-    dispatch(__dispatchInit) 
+    dispatch(__dispatchInit)
