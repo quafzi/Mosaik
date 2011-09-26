@@ -5,6 +5,12 @@ module.exports = class Config
     constructor: (@config={}) ->
         @routes = {} 
         @middlewares = {}
+        @__defineGetter__('routes', @getRoutes)
+
+    getRoutes: () -> [
+       routes: ['/']
+       dispatch: (t) -> t.res.send('Hello World')
+    ]
 
     merge: (config={}) ->
         @validate(config)
@@ -61,15 +67,15 @@ module.exports = class Config
     validate: (config={}, type='syntactic', name='ROOT') ->
         for key, value of config
             switch key
-                when 'childs'
+                when 'childs', 'layout'
                     for name, config of config.childs
                         @validate(config, type, name)
                 when 'routes'
                     value = [value] if value not instanceof Array
                     for route in value 
-                        @validateString(
+                        @validateStringOrRegExp(
                             route,
-                            "Block '#{name}': Route '#{route}' should be of type String but is of type '#{typeof route}'"
+                            "Block '#{name}': Route '#{route}' should be of type String or RegExp, but is of type '#{typeof route}'"
                         )
                 when 'types'
                     value = [value] if value not instanceof Array
@@ -136,6 +142,9 @@ module.exports = class Config
     
     validateString: (value, message) ->
         throw new Error(message) if typeof value isnt 'string'
+
+    validateStringOrRegExp: (value, message) ->
+        throw new Error(message) if typeof value isnt 'string' and value not instanceof RegExp
 
     validateFunction: (value, message) ->
         throw new Error(message) if typeof value isnt 'function'
